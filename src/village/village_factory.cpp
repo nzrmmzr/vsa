@@ -1,0 +1,10 @@
+//
+// Created by Serhii Pustovit on 30.11.2025.
+//
+
+#include "village_factory.hpp"
+
+namespace vsa {
+namespace village {
+} // village
+} // vsa
