@@ -17,6 +17,12 @@ std::size_t convert_time_to_days(const std::int32_t value, const std::int32_t un
         default: return 0;
     }
 }
+
+static float population_getter(void* data, int idx) {
+    auto* vec = (std::vector<size_t>*)data;
+    return (float)(*vec)[idx];
+}
+
 }
 
 MainWindow::MainWindow() {}
@@ -108,8 +114,13 @@ void MainWindow::render()
                 }
             }
         }
+        //
+        auto population = m_simulation->get_data().get_points();
+
         ImGui::SameLine();
         ImGui::Text("Day: %d", m_current_day);
+        ImGui::PlotHistogram("Population", population_getter, (void*)&population, population.size(), 0, NULL, 0.0f, 60.0f, ImVec2(0, 100.0f));
+
         if (ImGui::BeginNeoSequencer("Sequencer", &m_current_day, &m_start_day, &m_end_day)) {
             // Timeline code here
             ImGui::EndNeoSequencer();
