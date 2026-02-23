@@ -1,12 +1,6 @@
-//
-// Created by Serhii Pustovit on 30.11.2025.
-//
+#pragma once
 
-#ifndef VILLAGE_VILLAGE_HPP
-#define VILLAGE_VILLAGE_HPP
-
-namespace vsa {
-namespace village {
+namespace vsa::village {
 
 class Village
 {
@@ -15,6 +9,3 @@ public:
 };
 
 } // village
-} // vsa
-
-#endif // VILLAGE_VILLAGE_HPP

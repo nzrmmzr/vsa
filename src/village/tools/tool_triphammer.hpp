@@ -1,17 +1,14 @@
-//
-// Created by Serhii Pustovit on 30.11.2025.
-//
+#pragma once
 
-#ifndef VILLAGE_TOOL_TRIPHAMMER_HPP
-#define VILLAGE_TOOL_TRIPHAMMER_HPP
+#include <string>
 
-namespace vsa {
-namespace village {
+namespace vsa::village {
 
 class ToolTriphammer
-{};
+{
+public:
+    static std::string get_id() { return "triphammer_id"; }
+    static std::string get_name() { return "Triphammer"; }
+};
 
-} // village
-} // vsa
-
-#endif // VILLAGE_TOOL_TRIPHAMMER_HPP
+}

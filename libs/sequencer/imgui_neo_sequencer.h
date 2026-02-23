@@ -6,6 +6,7 @@
 #define IMGUI_NEO_SEQUENCER_H
 
 #include "imgui.h"
+#include <cstdint>
 #include <vector>
 
 typedef int ImGuiNeoSequencerFlags;

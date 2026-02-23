@@ -1,10 +1,13 @@
 #include "tools/logger.hpp"
 
 #include <csignal>
+#include <iostream>
 #include <memory>
 
 #include <tools/logger.hpp>
 #include <village_app.hpp>
+
+#include <village/entities_registry.hpp>
 
 std::unique_ptr<vsa::VillageApp> app;
 
@@ -16,6 +19,11 @@ void signal_handler(int signal)
 
 int main(int, char**)
 {
+    auto residents = vsa::village::EntitiesRegistry::get_instance().get_residents();
+    for (auto r : residents) {
+        std::cout << r.first << ": " << r.second << std::endl;
+    }
+
     app = std::make_unique<vsa::VillageApp>();
 
     std::signal(SIGABRT, signal_handler);
