@@ -20,6 +20,13 @@ FetchContent_Declare(
         GIT_TAG        486b55554f11c9cccc913e11a87085b2a91f706f
 )
 
+FetchContent_Declare(
+        tracy
+        GIT_REPOSITORY https://github.com/wolfpld/tracy
+        GIT_TAG        05cceee0df3b8d7c6fa87e9638af311dbabc63cb
+)
+
 FetchContent_MakeAvailable(json glm logger)
+FetchContent_MakeAvailable(tracy)
 
 add_library(json::json ALIAS nlohmann_json)

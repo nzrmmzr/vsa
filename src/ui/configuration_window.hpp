@@ -32,8 +32,8 @@ private:
     bool m_is_visible = true;
     bool m_is_simulation_running = false;
 
-    std::int32_t m_max_duration_value = 0;
-    std::int32_t m_max_duration_option_index = 0;
+    std::int32_t m_max_duration_value = 1;
+    std::int32_t m_max_duration_option_index = 3;
     sim::SimulationConfig m_config;
 
 

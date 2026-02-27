@@ -1,12 +1,18 @@
 #pragma once
 
+#include <map>
+#include <string>
 #include <vector>
 
 namespace vsa::sim {
 
 struct SimulationDataPoint
 {
-    std::size_t m_population;
+    std::size_t m_population = 0;
+    std::size_t m_males = 0;
+    std::size_t m_females = 0;
+    std::size_t m_avg_age_years = 0;
+    std::map<std::string, std::size_t> m_count_by_resident;
 };
 
 class SimulationData

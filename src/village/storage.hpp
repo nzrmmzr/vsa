@@ -1,17 +1,18 @@
-//
-// Created by Serhii Pustovit on 30.11.2025.
-//
+#pragma once
 
-#ifndef VILLAGE_STORAGE_HPP
-#define VILLAGE_STORAGE_HPP
+#include <map>
 
-namespace vsa {
-namespace village {
+#include <village/item.hpp>
+
+namespace vsa::village {
 
 class Storage
-{};
+{
+public:
+    Storage() = default;
+
+private:
+    std::map<std::string, std::size_t> m_id_items_count;
+};
 
 } // village
-} // vsa
-
-#endif // VILLAGE_STORAGE_HPP

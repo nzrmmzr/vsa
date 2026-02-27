@@ -30,10 +30,6 @@ ConfigurationWindow::ConfigurationWindow(std::function<void(const sim::Simulatio
     for (const auto& r : eri.get_residents()) {
         m_config.residents[r.first] = sim::SimulationConfig::Resident();
     }
-
-    for (const auto& it : eri.get_items()) {
-        m_config.items[it.first] = sim::SimulationConfig::Item();
-    }
 }
 
 ConfigurationWindow::~ConfigurationWindow() {}
@@ -88,25 +84,14 @@ void ConfigurationWindow::render()
                      0,
                      1);
 
-    ImGui::DragInt("Maximal amount of children in a family", &m_config.population.max_children_family, 1, 0, 10);
-
-    ImGui::SeparatorText("Residents List");
+    ImGui::SeparatorText("Residents");
 
     const auto& ress = village::EntitiesRegistry::get_instance().get_residents();
     for (auto& r : m_config.residents) {
-        const auto& name = ress.at(r.first);
-        ImGui::Text("%s", name.c_str());
-        ImGui::DragFloat(("Initial probability in the beginning distribution##" + name).c_str(), &r.second.initial_percentage, 0, 0, 1);
-        ImGui::DragFloat(("Probability of a resident getting this job##" + name).c_str(), &r.second.become_probability, 0, 0, 1);
-    }
-
-    ImGui::SeparatorText("Items List");
-
-    const auto& items = village::EntitiesRegistry::get_instance().get_items();
-    for (auto& it : m_config.items) {
-        const auto& name = items.at(it.first);
-        ImGui::Text("%s", name.c_str());
-        ImGui::DragInt(("Initial cost of a " + name).c_str(), &it.second.initial_price, 1, 1, 100);
+        const auto& entity = ress.at(r.first);
+        ImGui::Text("%s", entity.name.c_str());
+        ImGui::DragFloat(("Initial percentage##" + entity.name).c_str(), &r.second.initial_percentage, 0, 0, 1);
+        ImGui::DragFloat(("Become probability##" + entity.name).c_str(), &r.second.become_probability, 0, 0, 1);
     }
 
     ImGui::SeparatorText("Run");

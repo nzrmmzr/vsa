@@ -19,9 +19,9 @@ void signal_handler(int signal)
 
 int main(int, char**)
 {
-    auto residents = vsa::village::EntitiesRegistry::get_instance().get_residents();
-    for (auto r : residents) {
-        std::cout << r.first << ": " << r.second << std::endl;
+    auto r = vsa::village::EntitiesRegistry::get_instance().get_residents();
+    for (auto rr : r) {
+        std::cout << rr.first << ": " << rr.second.name << std::endl;
     }
 
     app = std::make_unique<vsa::VillageApp>();

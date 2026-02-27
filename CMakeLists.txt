@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME}
         src/ui/configuration_window.cpp
         src/village/residents/resident_baker.cpp
         src/village/residents/resident_blacksmith.cpp
+        src/village/residents/resident_herbalist.cpp
         src/village/tools/tool_sickle.cpp
         src/village/tools/tool_triphammer.cpp
         src/village/village.cpp
@@ -32,11 +33,15 @@ add_executable(${PROJECT_NAME}
         src/village/village_factory.cpp
         src/village/entities_registry.cpp
         src/village/entity_registrator.cpp
-        src/village/residents/resident_herbalist.cpp
+        src/village/residents/resident_factory.cpp
+        src/tools/random_engine.cpp
+        src/village/resident.cpp
+        src/village/village_config.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src/)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui glm::glm json::json spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} PRIVATE Tracy::TracyClient)
 
 

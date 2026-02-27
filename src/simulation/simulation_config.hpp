@@ -9,10 +9,14 @@ namespace vsa::sim {
 
 struct SimulationConfig
 {
+    std::size_t m_seed = 123456789;
+
     std::size_t max_duration_days = 10;
 
     struct Population
     {
+        std::size_t initial_population = 2000;
+
         std::int32_t initial_min_age = 20;
         std::int32_t initial_max_age = 60;
 
@@ -36,11 +40,6 @@ struct SimulationConfig
     };
     std::map<std::string, Resident> residents;
 
-    struct Item
-    {
-        std::int32_t initial_price = 20;
-    };
-    std::map<std::string, Item> items;
 };
 
 }
