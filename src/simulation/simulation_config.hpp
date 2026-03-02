@@ -25,7 +25,7 @@ struct SimulationConfig
         float percentage_of_women = 50.f;
         float percentage_of_men = 50.f;
 
-        float death_probability_day_increment = 0.003f;
+        float death_probability_day_increment = 0.0000003f;
 
         float couple_creation_probability_per_day = 0.003f;
         float couple_breaking_probability_per_day = 0.0001f;

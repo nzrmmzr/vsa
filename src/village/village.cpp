@@ -4,6 +4,8 @@
 
 #include "village.hpp"
 
+#include "tracy/Tracy.hpp"
+
 namespace vsa {
 namespace village {
 
@@ -16,27 +18,42 @@ sim::SimulationDataPoint Village::iterate()
     // Eat
     // Produce
 
-    for (std::size_t i = 0; i < m_residents.size(); ++i) {
-        auto& resident = m_residents.at(i);
-        resident->iterate();
-    }
-    std::erase_if(m_residents, [](const std::shared_ptr<Resident>& r) { return r->is_dead(); });
+    ZoneScopedN("Village::iterate");
 
+    {
+        ZoneScopedN("Residents Update");
+
+        for (std::size_t i = 0; i < m_residents.size(); ++i) {
+            auto& resident = m_residents.at(i);
+            resident->iterate();
+        }
+
+        {
+            ZoneScopedN("Erase Dead");
+            std::erase_if(m_residents, [](const std::shared_ptr<Resident>& r) { return r->is_dead(); });
+        }
+    }
 
     // Generate statistics data
     sim::SimulationDataPoint p;
-    p.m_population = m_residents.size();
-    for (const auto& resident : m_residents) {
-        if (resident->is_male()) { p.m_males++; }
-        else { p.m_females++; }
+    {
+        ZoneScopedN("Generate Statistics");
 
-        p.m_avg_age_years += resident->get_age_years();
-        p.m_count_by_resident[resident->get_id()]++;
-    }
-    if (!m_residents.empty()) {
-        p.m_avg_age_years /= m_residents.size();
-    } else {
-        p.m_avg_age_years = 0;
+        p.m_population = m_residents.size();
+
+        for (const auto& resident : m_residents) {
+            if (resident->is_male()) { p.m_males++; }
+            else { p.m_females++; }
+
+            p.m_avg_age_years += resident->get_age_years();
+            p.m_count_by_resident[resident->get_id()]++;
+        }
+
+        if (!m_residents.empty()) {
+            p.m_avg_age_years /= m_residents.size();
+        } else {
+            p.m_avg_age_years = 0;
+        }
     }
 
     return p;
