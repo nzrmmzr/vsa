@@ -74,6 +74,13 @@ float get_males_females(void* data, int idx)
     return 1.0 * sim.get_data().get_points()[idx].m_males / (sim.get_data().get_points()[idx].m_males + sim.get_data().get_points()[idx].m_females);
 }
 
+float get_born_deceased(void* data, int idx)
+{
+    auto& sim = *reinterpret_cast<sim::Simulation*>(data);
+    float total = (sim.get_data().get_points()[idx].m_number_of_born + sim.get_data().get_points()[idx].m_number_of_deceased);
+    return total > 0 ? (1.0f * sim.get_data().get_points()[idx].m_number_of_born / total) : 0.0f;
+}
+
 float get_males(void* data, int idx)
 {
     auto& sim = *reinterpret_cast<sim::Simulation*>(data);
@@ -175,8 +182,12 @@ void MainWindow::render()
             ImGui::Text("Males/Females: %d/%d", current_p.m_males, current_p.m_females);
             ImGui::ProgressBar(1.0 * current_p.m_males / (current_p.m_males + current_p.m_females));
             ImGui::Text("Couples count: %d", current_p.m_couples_count);
-            ImGui::Text("Average children count: %d", current_p.m_avg_children_count);
-            ImGui::Text("Average children count unique: %d", current_p.m_avg_children_count_unique);
+            ImGui::Text("Average children count: %.2f", current_p.m_avg_children_count);
+            ImGui::Text("Average children count unique: %.2f", current_p.m_avg_children_count_unique);
+            ImGui::Text("Born / Deceased: %d / %d (Population: %+d)",
+                current_p.m_number_of_born,
+                current_p.m_number_of_deceased,
+                static_cast<int>(current_p.m_number_of_born) - static_cast<int>(current_p.m_number_of_deceased));
 
             ImGui::TreePop();
         }
@@ -184,6 +195,9 @@ void MainWindow::render()
         if (ImGui::TreeNode("Global data")) {
             const auto& global = m_simulation->get_data().get_global();
             ImGui::Text("Average child creating age (years): %d", global.m_avg_first_child_age);
+            ImGui::Text("Number of residents dead before 18: %d", global.m_underage_deceased_count);
+            ImGui::Text("Number of residents dead after 100: %d", global.m_elders_deceased_count);
+            ImGui::Text("The eldest resident of all times was: %d years old.", global.m_the_eldest_resident_age);
             ImGui::TreePop();
         }
 
@@ -197,6 +211,7 @@ void MainWindow::render()
             ImGui::PlotHistogram("Couples count", &get_couples, m_simulation.get(), m_simulation->get_data().get_points().size(), 0, nullptr, FLT_MAX, FLT_MAX, ImVec2(0.0 , 160));
             ImGui::PlotHistogram("Average children count", &get_avg_children_count, m_simulation.get(), m_simulation->get_data().get_points().size(), 0, nullptr, FLT_MAX, FLT_MAX, ImVec2(0.0 , 160));
             ImGui::PlotHistogram("Average children count (unique)", &get_avg_children_count_unique, m_simulation.get(), m_simulation->get_data().get_points().size(), 0, nullptr, FLT_MAX, FLT_MAX, ImVec2(0.0 , 160));
+            ImGui::PlotLines("Born/ Deceased", &get_born_deceased, m_simulation.get(), m_simulation->get_data().get_points().size(), 0, nullptr, FLT_MAX, FLT_MAX, ImVec2(0.0 , 160));
             ImGui::PopItemWidth();
             ImGui::TreePop();
         }

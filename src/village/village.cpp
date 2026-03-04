@@ -26,6 +26,7 @@ Village::Village(std::vector<std::shared_ptr<Resident>> residents):m_residents(r
 
 sim::SimulationDataPoint Village::iterate(sim::SimulationDataGlobal& global)
 {
+    sim::SimulationDataPoint p;
     //
     // Consume (collect requirements)
     // Eat
@@ -36,7 +37,13 @@ sim::SimulationDataPoint Village::iterate(sim::SimulationDataGlobal& global)
         resident->iterate();
     }
     for (auto r : m_residents) {
-        if (r->is_dead()) { r->remove_relations(); }
+        if (r->is_dead()) {
+            p.m_number_of_deceased++;
+            if (r->get_age_years() > global.m_the_eldest_resident_age){ global.m_the_eldest_resident_age = r->get_age_years();}
+            if (r->get_age_years() < 18){ global.m_underage_deceased_count++; }
+            else if ( r->get_age_years() > 100 ){ global.m_elders_deceased_count++; }
+            r->remove_relations();
+        }
     }
     std::erase_if(m_residents, [](const std::shared_ptr<Resident>& r) { return r->is_dead(); });
     std::erase_if(m_residents_m, [](const std::shared_ptr<Resident>& r) { return r->is_dead(); });
@@ -58,6 +65,7 @@ sim::SimulationDataPoint Village::iterate(sim::SimulationDataGlobal& global)
     }
 
     if (m_couples.size() > 0 && tools::RandomEngine::get_instance().get_random_bool(VillageConfig::get_config().population.child_creation_probability_per_day)) {
+        p.m_number_of_born++;
         auto p = m_couples[tools::RandomEngine::get_instance().get_random_uint(0, m_couples.size() - 1)];
         const auto& residents_ids = village::EntitiesRegistry::get_instance().get_residents_ids();
         auto c = ResidentFactory::create_resident(
@@ -73,10 +81,10 @@ sim::SimulationDataPoint Village::iterate(sim::SimulationDataGlobal& global)
 
         global.m_avg_first_child_age += p.first->get_age_years() + p.second->get_age_years();
         global.m_avg_first_child_age /= 3;
+
     }
 
     // Generate statistics data
-    sim::SimulationDataPoint p;
     p.m_population = m_residents.size();
     p.m_males = m_residents_m.size();
     p.m_females = m_residents_f.size();
@@ -89,6 +97,7 @@ sim::SimulationDataPoint Village::iterate(sim::SimulationDataGlobal& global)
         p.m_avg_age_years += resident->get_age_years();
         p.m_avg_children_count += resident->get_children_count();
         p.m_count_by_resident[resident->get_id()]++;
+
     }
     p.m_avg_children_count_unique = p.m_avg_children_count / (residents_with_children_count ? residents_with_children_count : 1);
     p.m_avg_children_count /= m_residents.size() ? m_residents.size() : 1;
