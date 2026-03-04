@@ -16,6 +16,10 @@ Resident::Resident(bool is_male, std::size_t age_days) : m_is_male(is_male), m_a
     m_death_probability = prob_days * VillageConfig::get_config().population.death_probability_day_increment;
 }
 
+Resident::~Resident(){
+
+}
+
 bool Resident::iterate()
 {
     iterate_impl();
@@ -26,6 +30,17 @@ bool Resident::iterate()
     m_is_dead = tools::RandomEngine::get_instance().get_random_bool(m_death_probability / 100);
 
     return m_is_dead;
+}
+
+void Resident::remove_relations(){
+    for(auto c : m_children){
+        if(is_male()){ c->remove_father(); }
+        else{ c->remove_mother(); }
+    }
+
+    if(m_father){ m_father->remove_child(shared_from_this()); }
+    if(m_mother){ m_mother->remove_child(shared_from_this()); }
+    if(m_spouse){ m_spouse->remove_spouse(); }
 }
 
 } // vsa

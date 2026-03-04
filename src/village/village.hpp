@@ -21,6 +21,10 @@ public:
 private:
     std::shared_ptr<Storage> m_storage;
     std::vector<std::shared_ptr<Resident>> m_residents;
+    std::vector<std::shared_ptr<Resident>> m_residents_m;
+    std::vector<std::shared_ptr<Resident>> m_residents_f;
+
+    std::vector<std::pair<std::shared_ptr<Resident>, std::shared_ptr<Resident>>> m_couples;
 };
 
 } // village

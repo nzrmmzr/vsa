@@ -15,7 +15,7 @@ struct SimulationConfig
 
     struct Population
     {
-        std::size_t initial_population = 2000;
+        std::int32_t initial_population = 2000;
 
         std::int32_t initial_min_age = 20;
         std::int32_t initial_max_age = 60;
@@ -30,6 +30,10 @@ struct SimulationConfig
         float couple_creation_probability_per_day = 0.003f;
         float couple_breaking_probability_per_day = 0.0001f;
         float child_creation_probability_per_day = 0.0001f;
+
+        std::int32_t min_marry_age = 18;
+        std::int32_t max_age_gap = 15;
+
     };
     Population population;
 

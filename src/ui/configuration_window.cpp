@@ -58,6 +58,7 @@ void ConfigurationWindow::render()
     m_config.max_duration_days = convert_time_to_days(m_max_duration_value, m_max_duration_option_index);
 
     ImGui::SeparatorText("Population");
+    ImGui::DragInt("Initial population", &m_config.population.initial_population, 1, 0, 100000000);
     ImGui::DragInt("Initial min age", &m_config.population.initial_min_age, 1, 0, 90);
     ImGui::DragInt("Initial max age", &m_config.population.initial_max_age, 1, 0, 90);
     if (ImGui::DragFloat("Percentage of women", &m_config.population.percentage_of_women, 0, 0, 100)) {
@@ -72,6 +73,8 @@ void ConfigurationWindow::render()
                      0,
                      0,
                      1);
+    ImGui::DragInt("Minimal age to create a couple", &m_config.population.min_marry_age, 1, 16, m_config.population.initial_max_age);
+    ImGui::DragInt("Maximal age gap in couples", &m_config.population.max_age_gap, 1, 0, 90);
     ImGui::DragFloat("The probability of breaking a couple (per day)",
                      &m_config.population.couple_breaking_probability_per_day,
                      0,
